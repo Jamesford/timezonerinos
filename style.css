@@ -1,0 +1,63 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Helvetica;
+  color: #333;
+  padding: 0;
+  margin: 0;
+}
+
+.header {
+  margin: 10px;
+}
+
+#rows {
+  overflow-x: scroll;
+}
+
+.row {
+  /* flexbox parent props */
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  /* other css props */
+  height: 100px;
+  display: flex;
+  border-top: 1px solid rgb(238, 238, 238);
+}
+
+.row:last-child {
+  border-bottom: 1px solid rgb(238, 238, 238);
+}
+
+.meta, .hour {
+  /* flexbox child props */
+  align-self: center;
+  /* flexbox parent props */
+  display: flex;
+  justify-content: center;
+  /* other css props */
+  border-right: 1px solid rgb(238, 238, 238);
+  height: 100px;
+}
+
+.meta > p,
+.hour > p {
+  align-self: center
+}
+
+.meta {
+  width: 150px;
+}
+
+.hour {
+  width: 75px;
+}
+
+.controls {
+  margin: 10px;
+}

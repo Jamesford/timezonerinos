@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- <title>Timezonerinos</title> -->
+  <link rel='stylesheet' type='text/css' href='style.css'>
+  <script src='/lib/moment.min.js'></script>
+  <script src='/lib/moment-timezone-with-data.min.js'></script>
+</head>
+<body>
+  <header class='header'>
+    <h1>Timezonerinos</h1>
+    <p>We think your timezone is <span id='utz'>Europe/London</span></p>
+  </header>
+
+  <div id='rows'>
+  </div>
+
+  <div class='controls'>
+    <select id='tzSelect'>
+      <option default disabled value=''>Select a new timezone</option>
+    </select>
+    <button onClick='clickAdd()'>Add</button>
+  </div>
+  <script src='main.js'></script>
+</body>
+</html>
