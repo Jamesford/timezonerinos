@@ -79,7 +79,7 @@ function clickAdd () {
   if (tzSelect.value) {
     if (activeZones.add(tzSelect.value)) {
       addRow(tzSelect.value, today)
-      tzSelect.value = ''
+      $('#tzSelect').val(null).trigger('change')
     }
   }
 }
@@ -157,3 +157,9 @@ function showTime () {
 }
 showTime()
 setInterval(showTime, 1000)
+
+var $selectBox = $("#tzSelect").select2({
+  placeholder: "Add another timezone"
+})
+// $(document).ready(function() {
+// })

@@ -84,3 +84,7 @@ body {
 .controls {
   margin: 10px;
 }
+
+#tzSelect {
+  width: 360px;
+}
