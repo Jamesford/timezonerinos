@@ -63,7 +63,7 @@ function highlightCurrentHour() {
   var nowColumn = document.querySelectorAll(`#rows>.row>.hour:nth-child(${now + 2})`)
   for ( i = 0; i < nowColumn.length; i++ ) {
     var hour = nowColumn[i]
-    hour.style.border = '1px solid rgba(0, 120, 165, 0.8)'
+    hour.style.border = '2px solid rgba(0, 120, 165, 0.8)'
     if (i !== 0) {
       hour.style['border-top'] = 'none'
     }
