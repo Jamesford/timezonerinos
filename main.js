@@ -27,7 +27,6 @@ function addRow (tz, basedate) {
 }
 
 function removeRow (tz) {
-  console.log(tz)
   document.querySelector(`.row[data-tz="${tz}"]`).remove()
   highlightCurrentHour()
 }
@@ -145,3 +144,16 @@ timezones.forEach(function (zone) {
   option.text = zone
   tzSelect.add(option)
 })
+
+// Run a clock element on the page
+var timeNode = document.querySelector('#time')
+var displayedTime = null
+function showTime () {
+  var now = moment().format('HH:mm')
+  if (displayedTime !== now) {
+    displayedTime = now
+    timeNode.innerHTML = displayedTime
+  }
+}
+showTime()
+setInterval(showTime, 1000)
