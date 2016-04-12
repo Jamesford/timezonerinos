@@ -71,10 +71,12 @@ body {
   top: 10px;
   right: 10px;
   cursor: pointer;
+  opacity: 0.25;
 }
 
 .meta > .remove:hover {
   color: #CC2626;
+  opacity: 1;
 }
 
 .hour {
