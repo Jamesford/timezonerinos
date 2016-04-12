@@ -1,9 +1,14 @@
+function isHomeTz (tz) {
+  return tz === moment.tz.guess()
+}
+
 // Inserts a new row based on a given timezone
 function addRow (tz, basedate) {
+  var homeIcon = isHomeTz(tz) ? "<a class='home'>⌂</a>" : ""
   var rows = document.querySelector('#rows')
-  var row = `<div class='row' data-tz=${tz}><section class='meta'><p>${tz.split('/')[tz.split('/').length - 1]}</p></section>`
+  var row = `<div class='row' data-tz=${tz}><section class='meta'><p>${tz.split('/')[tz.split('/').length - 1]}</p><a class='remove' onClick='clickRemove("${tz}")'>&times;</a>${homeIcon}</section>`
   var currentHour = moment(basedate).tz(tz).hour()
-  for ( i = 0; i < 25; i++ ) {
+  for ( i = 0; i < 24; i++ ) {
     if (currentHour === 0) {
       row += `<section class='hour'><p>${moment(basedate).tz(tz).add(i, 'hours').format('MMM D')}</p></section>` 
     } else {
@@ -17,15 +22,13 @@ function addRow (tz, basedate) {
   }
   row += '</div>'
   rows.innerHTML = rows.innerHTML + row
-  ActiveZones.push(tz)
-  hoverHandlers() // Must reset handlers upon adding new row
   highlightCurrentHour()
+  hoverHandlers() // Must reset handlers upon adding new row
 }
 
 function removeRow (tz) {
-  var index = ActiveZones.indexOf(tz)
-  document.querySelector(`#rows>.row:nth-child(${index + 1})`).remove()
-  ActiveZones.splice(index, 1)
+  console.log(tz)
+  document.querySelector(`.row[data-tz="${tz}"]`).remove()
   highlightCurrentHour()
 }
 
@@ -35,10 +38,12 @@ function hoverHandlers () {
   for ( i = 0; i < hours.length; i++ ) {
     var hour = hours[i]
     var hoveredHourElems = null;
+    var hoveredHourElemsStyles = null;
     hour.addEventListener('mouseover', function (e) {
       var hourElem = e.target.closest('.hour')
       var index = Array.prototype.indexOf.call(hourElem.parentNode.children, hourElem) + 1
       hoveredHourElems = document.querySelectorAll(`.hour:nth-child(${index})`)
+      hoveredHourElemsStyles = []
       for ( i = 0; i < hoveredHourElems.length; i++ ) {
         var hoveredElem = hoveredHourElems[i]
         hoveredElem.style.background = 'rgb(245, 245, 245)'
@@ -73,32 +78,64 @@ function highlightCurrentHour() {
 function clickAdd () {
   var tzSelect = document.querySelector('#tzSelect')
   if (tzSelect.value) {
-    addRow(tzSelect.value, today)
-    tzSelect.value = ''
+    if (activeZones.add(tzSelect.value)) {
+      addRow(tzSelect.value, today)
+      tzSelect.value = ''
+    }
   }
 }
 
-// Get Today
-var today = moment().startOf('day')
+// Event handler for removing row
+function clickRemove (tz) {
+  if (activeZones.remove(tz)) {
+    removeRow(tz)
+  }
+}
 
-// Keep track of active zones
-var ActiveZones = []
+// Keep track of active zones and load saved zones
+function ActiveZones () {
+  this.zones = new Array()
+  var savedTzs = JSON.parse(localStorage.getItem('savedTzs'))
+  if (savedTzs) { 
+    savedTzs.forEach(function (tz) { this.zones.push(tz) }.bind(this))
+  }
+  return this
+}
+
+ActiveZones.prototype.add = function (item, first) {
+  if (this.zones.indexOf(item) > -1) return false
+  if (first) this.zones.unshift(item)
+  else this.zones.push(item)
+  localStorage.setItem('savedTzs', JSON.stringify(this.zones))
+  return true
+}
+
+ActiveZones.prototype.remove = function (item) {
+  var idx = this.zones.indexOf(item)
+  if (idx === -1) return false
+  this.zones.splice(idx, 1)
+  localStorage.setItem('savedTzs', JSON.stringify(this.zones))
+  return true
+}
+
+// Today
+var today = moment().startOf('day')
 
 // Guess user's timezone, default to London
 var utz = document.querySelector('#utz')
 var userTimeZone = moment.tz.guess() || "Europe/London"
 utz.innerHTML = userTimeZone
 
-// Add user's timezone to rows
-addRow(userTimeZone, today)
+// Init activeZones list
+var activeZones = new ActiveZones()
 
-// Add Zones Saved in localStorage
-var userZones = JSON.parse(localStorage.getItem('timezones'))
-if (userZones) {
-  userZones.forEach(function (zone) {
-    addRow(zone, today)
-  })
-}
+// Insert user's timezone to front of active zones
+activeZones.add(userTimeZone, true)
+
+// Add row for each timezone in active zones
+activeZones.zones.forEach(function (zone) {
+  addRow(zone, today)
+})
 
 // Populate Timzone Select Box
 var tzSelect = document.querySelector('#tzSelect')
