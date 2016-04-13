@@ -97,3 +97,18 @@ body {
 #tzSelect {
   width: 360px;
 }
+
+#help {
+  color: rgba(0, 120, 165, 0.8);
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 3px;
+  font-size: 14px;
+  margin: 0 5px;
+  border: 1px solid rgba(0, 120, 165, 0.8);
+}
+
+#help:hover {
+  background: rgba(0, 120, 165, 0.8);
+  color: white;
+}

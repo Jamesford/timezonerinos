@@ -177,3 +177,37 @@ setInterval(showTime, 1000)
 var $selectBox = $("#tzSelect").select2({
   placeholder: "Add another timezone"
 })
+
+function startIntro(){
+  var intro = introJs();
+    intro.setOptions({
+      showStepNumbers: false,
+      steps: [
+        { 
+          intro: "Here's a quick tour so you can get acquainted with this app."
+        },
+        {
+          element: document.querySelector('#utz'),
+          intro: "This is the timezone we estimate you to be in."
+        },
+        {
+          element: document.querySelector('#rows'),
+          intro: "Here's the list of current times by hour (24h) of your selected timezones."
+        },
+        {
+          element: document.querySelector('.select2'),
+          intro: 'Add more timezones to your list here.',
+          position: 'right'
+        },
+        {
+          element: document.querySelector('.clock'),
+          intro: "This is a clock, showing the current time for your timezone.",
+          position: 'left'
+        },
+        {
+          intro: 'Thats all, good luck!'
+        }
+      ]
+    });
+    intro.start();
+}

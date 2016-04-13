@@ -4,8 +4,10 @@
   <title>Timezonerinos</title>
   <link rel='stylesheet' type='text/css' href='style.css'>
   <link rel='stylesheet' type='text/css' href='/lib/select2.min.css'>
+  <link rel='stylesheet' type='text/css' href='/lib/introjs.min.css'>
   <script src='/lib/jquery.min.js'></script>
   <script src='/lib/select2.min.js'></script>
+  <script src='/lib/intro.min.js'></script>
   <script src='/lib/moment.min.js'></script>
   <script src='/lib/moment-timezone-with-data.min.js'></script>
 </head>
@@ -25,6 +27,7 @@
     <select id='tzSelect' onChange='clickAdd()'>
       <option default disabled value=''>Add another timezone</option>
     </select>
+    <a id='help' onClick='startIntro()'>Help</a>
   </div>
 
   <script src='main.js'></script>
