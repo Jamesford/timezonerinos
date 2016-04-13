@@ -4,9 +4,9 @@ function isHomeTz (tz) {
 
 // Inserts a new row based on a given timezone
 function addRow (tz, basedate) {
-  var homeIcon = isHomeTz(tz) ? "<a class='home'>⌂</a>" : ""
+  var homeIcon = isHomeTz(tz) ? "<a class='home'>Home</a>" : ""
   var rows = document.querySelector('#rows')
-  var row = `<div class='row' data-tz=${tz}><section class='meta'><p>${tz.split('/')[tz.split('/').length - 1]}</p><a class='remove' onClick='clickRemove("${tz}")'>&times;</a>${homeIcon}</section>`
+  var row = `<div class='row' data-tz=${tz}><section class='meta'><p>${tz.split('/')[tz.split('/').length - 1].replace(/_/g, ' ')}</p><a class='remove' onClick='clickRemove("${tz}")'>&times;</a>${homeIcon}</section>`
   var currentHour = moment(basedate).tz(tz).hour()
   for ( i = 0; i < 24; i++ ) {
     if (currentHour === 0) {
@@ -136,12 +136,28 @@ activeZones.zones.forEach(function (zone) {
   addRow(zone, today)
 })
 
-// Populate Timzone Select Box
+// Get all timezones
 var tzSelect = document.querySelector('#tzSelect')
 var timezones = moment.tz.names()
-timezones.forEach(function (zone) {
+
+// Filter timezones by "(place/)place/place" format
+var pass = timezones.filter(function (tz) {
+  return /^([A-z0-9+-]{1,}\/)+[A-z0-9+-]{1,}$/.test(tz)
+})
+
+// var fail = timezones.filter(function (tz) {
+//   return !/^([A-z0-9+-]{1,}\/)+[A-z0-9+-]{1,}$/.test(tz)
+// })
+
+// Populate Timzone Select Box with filtered results
+pass.forEach(function (zone) {
   var option = document.createElement('option')
-  option.text = zone
+  if (zone.indexOf('Etc') > -1) {
+    option.text = zone.replace('Etc/', '')
+  } else {
+    option.text = zone.replace(/_/g, ' ').replace(/\//g, ' / ')
+  }
+  option.value = zone
   tzSelect.add(option)
 })
 
@@ -161,5 +177,3 @@ setInterval(showTime, 1000)
 var $selectBox = $("#tzSelect").select2({
   placeholder: "Add another timezone"
 })
-// $(document).ready(function() {
-// })
